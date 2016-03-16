@@ -34,7 +34,7 @@ func ProbDataDeal(pdf ProbDataForm) ([]byte, error) {
 	}
 	fmt.Println("context before zip:", pdf.ProbFormatComb())
 	procPack.Context = probeDateZip(pdf.ProbFormatComb())
-	fmt.Println("context after zip:", procPack.Context)
+	//fmt.Println("context after zip:", procPack.Context)
 	return probeDesEncry(structToBuff(procPack), pdf.DesKey(), pdf.DesIv())
 }
 
@@ -65,6 +65,6 @@ func probeDesEncry(buf, key, iv []byte) ([]byte, error) {
 	
 	pading := []byte{'A', 'B', 'C', 'D'}
 	buf = append(buf, pading...)
-
+	fmt.Println("context before des:", buf, "len=",len(buf))
 	return DesEncrypt(buf, key, iv)
 }

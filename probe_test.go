@@ -6,6 +6,7 @@ import (
 	"net"
 	"strings"
 	"testing"
+	"time"
 )
 
 type TblStaProbInfos struct {
@@ -49,8 +50,8 @@ func TestProbe(t *testing.T) {
 		WlanEncrypion:         "",
 		XCoordinate:           5,
 		YCoordinate:           1,
-		NetbarWacode:          "333333333333101909571",
-		CollectionEquipmentId: "22331234567890",
+		NetbarWacode:          "22331234567890",
+		CollectionEquipmentId: "333333333333101909571",
 		Longitude:             123.23000,
 		Latitude:              133.000000,
 	}
@@ -58,24 +59,20 @@ func TestProbe(t *testing.T) {
 	spiSlice := STblStaProbInfos(piSlice)
 	fmt.Println("original content=", spiSlice)
 	content,_ := ProbDataDeal(spiSlice)
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.216:8089")
-	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "121.43.231.237:7777")
+	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.216:18040")
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", "121.43.231.237:7777")
 	if err != nil {
 		fmt.Println("ResolveTCPAddr failed!")
 		return
 	}
-	fmt.Println("Send:", content)
-	TcpUpload(content, tcpAddr)
+	fmt.Println("Send:", content,"len=", len(content))
+	for {
+		TcpUpload(content, tcpAddr)
+		time.Sleep(1)
+	}
 	return
 }
-/*
-type ProbDataForm interface {
-	ProbFormatComb() []byte
-	ProbDataType() uint32
-	DesKey() []byte
-	DesIv() []byte
-}
-*/
+
 func (this STblStaProbInfos) ProbFormatComb() []byte {
 	jaSlice := make([]string, 2)
 	for _, v := range this {

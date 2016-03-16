@@ -8,6 +8,7 @@ import (
 )
 
 func TcpUpload(data []byte, tcpServ *net.TCPAddr) (int, error) {
+	fmt.Println("tcp send begin")
 	conn, err := net.DialTCP("tcp", nil, tcpServ)
 	if err != nil {
 		return 0, err
@@ -15,12 +16,14 @@ func TcpUpload(data []byte, tcpServ *net.TCPAddr) (int, error) {
 	send := 0
 	size := len(data)
 	if send < size {
+		fmt.Println("first send:", data[send:],"len=", len(data))
 		i, err := conn.Write(data[send:])
 		if err != nil {
 			return send, err
 		}
 		send += i
 	}
+	fmt.Println("tcp send succeed!")
 	result, err := ioutil.ReadAll(conn)
     checkError(err)
     fmt.Println(string(result))
