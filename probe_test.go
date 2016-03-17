@@ -59,17 +59,17 @@ func TestProbe(t *testing.T) {
 	spiSlice := STblStaProbInfos(piSlice)
 	fmt.Println("original content=", spiSlice)
 	content,_ := ProbDataDeal(spiSlice)
-	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.216:18040")
+	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.128:18040")
 	tcpAddr, err := net.ResolveTCPAddr("tcp4", "121.43.231.237:7777")
 	if err != nil {
 		fmt.Println("ResolveTCPAddr failed!")
 		return
 	}
 	fmt.Println("Send:", content,"len=", len(content))
-	for {
+	//for {
 		TcpUpload(content, tcpAddr)
 		time.Sleep(1)
-	}
+	//}
 	return
 }
 
