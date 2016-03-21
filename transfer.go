@@ -3,30 +3,32 @@ package prbtransfer
 import (
 	"errors"
 	"fmt"
-	"net"
 	"io/ioutil"
+	"net"
 )
 
 func TcpUpload(data []byte, tcpServ *net.TCPAddr) (int, error) {
 	fmt.Println("tcp send begin")
 	conn, err := net.DialTCP("tcp", nil, tcpServ)
 	if err != nil {
+		fmt.Println("DialTCP failed!")
 		return 0, err
 	}
 	send := 0
 	size := len(data)
 	if send < size {
-		fmt.Println("first send:", data[send:],"len=", len(data))
+		fmt.Println("first send:", data[send:], "len=", len(data))
 		i, err := conn.Write(data[send:])
 		if err != nil {
+			fmt.Println("send failed!")
 			return send, err
 		}
 		send += i
 	}
-	fmt.Println("tcp send succeed!")
+	fmt.Println("tcp send succeed!")	
 	result, err := ioutil.ReadAll(conn)
-    checkError(err)
-    fmt.Println(string(result))
+	checkError(err)
+	fmt.Println(string(result))
 	conn.Close()
 	return send, errors.New("tcp send succeed!")
 }
@@ -35,7 +37,7 @@ func UdpUpload(data []byte, udpServ *net.UDPAddr) (int, error) {
 	//udpAddr, err := net.ResolveUDPAddr("udp4", service)
 	conn, err := net.DialUDP("udp", nil, udpServ)
 	if err != nil {
-		return 0,err
+		return 0, err
 	}
 	send := 0
 	size := len(data)

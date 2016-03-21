@@ -59,8 +59,8 @@ func TestProbe(t *testing.T) {
 	spiSlice := STblStaProbInfos(piSlice)
 	fmt.Println("original content=", spiSlice)
 	content,_ := ProbDataDeal(spiSlice)
-	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.128:18040")
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", "121.43.231.237:7777")
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.128:18040")
+	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "121.43.231.237:7777")
 	if err != nil {
 		fmt.Println("ResolveTCPAddr failed!")
 		return
@@ -74,7 +74,7 @@ func TestProbe(t *testing.T) {
 }
 
 func (this STblStaProbInfos) ProbFormatComb() []byte {
-	jaSlice := make([]string, 2)
+	jaSlice := make([]string, 0)
 	for _, v := range this {
 		a := []string{v.WlanMac, v.StaBrand, v.StaCacheSsid, toString(v.CaptureTime), toString(v.WlanRssi),
 			toString(v.Identification), v.CertificateCode, v.WlanEssid, v.AccessAPMac, toString(v.WlanChannel),
@@ -82,8 +82,10 @@ func (this STblStaProbInfos) ProbFormatComb() []byte {
 			toString(v.Longitude), toString(v.Latitude)}
 		ja := strings.Join(a, "\t")
 		jaSlice = append(jaSlice, ja)
+		fmt.Println("byte1:", jaSlice)
 	}
 	jasj := strings.Join(jaSlice, "\r\n")
+	fmt.Println("byte2:", jasj)
 	return []byte(jasj)
 }
 

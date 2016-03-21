@@ -1,10 +1,14 @@
 package prbtransfer
 
 import (
-	"bytes"
-	"compress/zlib"
+	//"bytes"
+	//"compress/zlib"
+	"archive/zip"
 	"encoding/binary"
 	"fmt"
+	//"io"
+	"io/ioutil"
+	"os"
 )
 
 type ProbDataForm interface {
@@ -66,18 +70,91 @@ func probeDateZip(context []byte) []byte {
 	*/
 	//fmt.Println(b.Bytes())
 	/*
-	var buf bytes.Buffer
-	fmt.Println("before zip :", context, "len=", len(context))
-    compressor, err := zlib.NewWriterLevelDict(&buf, zlib.BestCompression, context)
-    if err != nil {
-        fmt.Println("压缩失败")
-        return nil 
-    }
-    compressor.Write(context)
-    compressor.Close()
-	fmt.Println("after zip :", buf.Bytes(), "len=", len(buf.Bytes()))
-	return buf.Bytes()
+			var buf bytes.Buffer
+			fmt.Println("before zip :", context, "len=", len(context))
+		    compressor, err := zlib.NewWriterLevelDict(&buf, zlib.BestCompression, context)
+		    if err != nil {
+		        fmt.Println("压缩失败")
+		        return nil
+		    }
+		    compressor.Write(context)
+		    compressor.Close()
+			fmt.Println("after zip :", buf.Bytes(), "len=", len(buf.Bytes()))
+			return buf.Bytes()
 	*/
+		//写文件
+		err := ioutil.WriteFile("./data/zip.data", context, 0644)
+		if err != nil {
+			fmt.Println("WriteFile failed!")
+			return []byte("")
+		}
+		//压缩
+		const dir = "./data/"
+		//获取源文件列表
+		f, err := ioutil.ReadDir(dir)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fzip, _ := os.Create("img-50.zip")
+		w := zip.NewWriter(fzip)
+		for _, file := range f {
+			fw, _ := w.Create(file.Name())
+			filecontent, err := ioutil.ReadFile(dir + file.Name())
+			if err != nil {
+				fmt.Println(err)
+			}
+			n, err := fw.Write(filecontent)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println(n)
+		}
+		w.Close()
+	//读文件
+	
+		dat, err := ioutil.ReadFile("./img-50.zip")
+		if err != nil {
+			fmt.Println("err:", err)
+			return []byte("")
+		}
+		fmt.Println("dat:", dat, "len=", len(dat))
+		return dat
+	
+	/*
+		const File = "img-50.zip"
+		const dir_2 = "./"
+		//os.Mkdir(dir, 0777) //创建一个目录
+
+		cf, err := zip.OpenReader(File) //读取zip文件
+		if err != nil {
+			fmt.Println(err)
+		}
+		
+		for _, file := range cf.File {
+			rc, err := file.Open()
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			f, err := os.Create(dir_2 + file.Name)
+			if err != nil {
+				fmt.Println(err)
+			}
+			defer f.Close()
+			buf := make([]byte, 100)
+			rc.Read(buf)
+			n, err := io.Copy(f, rc)
+			if err != nil {
+				fmt.Println(err)
+			}
+			
+			fmt.Println("rc.Read=",buf)
+			fmt.Println(n)
+		}
+		cf.Close()
+		//fmt.Println("rc.Read=", rc.Read())
+		return []byte("")
+		*/
 }
 func probeDesEncry(buf, key, iv []byte) ([]byte, error) {
 	datalen := make([]byte, 4)
