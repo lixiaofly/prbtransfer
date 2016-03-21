@@ -28,6 +28,7 @@ func ProbDataDeal(pdf ProbDataForm) ([]byte, error) {
 	datatype := make([]byte, 4)
 	datasize := make([]byte, 4)
 
+	fmt.Println("ProbFormatComb=", string(pdf.ProbFormatComb()))
 	binary.BigEndian.PutUint32(datatype, pdf.ProbDataType())
 	binary.BigEndian.PutUint32(datasize, uint32(len(pdf.ProbFormatComb())))
 	fmt.Println("len(buf3)=", uint32(len(pdf.ProbFormatComb())), "datasize=", datasize)
@@ -90,7 +91,7 @@ func probeDateZip(context []byte) []byte {
 		}
 		//压缩
 		const dir = "./data/"
-		//获取源文件列表
+			//获取源文件列表
 		f, err := ioutil.ReadDir(dir)
 		if err != nil {
 			fmt.Println(err)
