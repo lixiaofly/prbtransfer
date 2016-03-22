@@ -59,8 +59,8 @@ func TestProbe(t *testing.T) {
 	spiSlice := STblStaProbInfos(piSlice)
 	fmt.Println("original content=", spiSlice)
 	content,_ := ProbDataDeal(&spiSlice)
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.6:18040")
-	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "121.43.231.237:7777")
+	//tcpAddr, err := net.ResolveTCPAddr("tcp4", "61.141.136.6:18040")
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", "121.43.231.237:7777")
 	if err != nil {
 		fmt.Println("ResolveTCPAddr failed!")
 		return
@@ -82,11 +82,11 @@ func (this *STblStaProbInfos) ProbFormatComb() []byte {
 			toString(v.Longitude), toString(v.Latitude)}
 		ja := strings.Join(a, "\t")
 		jaSlice = append(jaSlice, ja)
-		fmt.Println("byte1:", jaSlice)
+		//fmt.Println("byte1:", jaSlice)
 	}
 	jasj := strings.Join(jaSlice, "\r\n")
-	fmt.Println("byte2:[", jasj, "]")
-	fmt.Println("len(jasj)=",len(jasj))
+	//fmt.Println("byte2:[", jasj, "]")
+	//fmt.Println("len(jasj)=",len(jasj))
 	//fmt.Println("cap(jasj)=",cap(jasj))
 	return []byte(jasj)
 }
